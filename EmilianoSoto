@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+public class Principal {
+    public static void main(String[] args) {
+        Scanner lectura = new Scanner(System.in);
+        ConsultaMoneda consulta = new ConsultaMoneda();
+        int opcion = 0;
+
+        String menu = """
+                ******************************************
+                Sea bienvenido al Conversor de Moneda
+                
+                1) Dólar =>> Peso Chileno
+                2) Peso Chileno =>> Dólar
+                3) Dólar =>> Real Brasileño
+                4) Real Brasileño =>> Dólar
+                5) Dólar =>> Peso Argentino
+                6) Peso Argentino =>> Dólar
+                7) Salir
+                Elija una opción válida:
+                ******************************************
+                """;
+
+        while (opcion != 7) {
+            System.out.println(menu);
+            try {
+                opcion = Integer.parseInt(lectura.nextLine());
+                
+                if (opcion == 7) break;
+
+                System.out.println("Ingrese el valor que desea convertir:");
+                double valor = Double.parseDouble(lectura.nextLine());
+
+                String base = "", target = "";
+
+                switch (opcion) {
+                    case 1 -> { base = "USD"; target = "CLP"; }
+                    case 2 -> { base = "CLP"; target = "USD"; }
+                    case 3 -> { base = "USD"; target = "BRL"; }
+                    case 4 -> { base = "BRL"; target = "USD"; }
+                    case 5 -> { base = "USD"; target = "ARS"; }
+                    case 6 -> { base = "ARS"; target = "USD"; }
+                    default -> System.out.println("Opción no válida.");
+                }
+
+                if (!base.isEmpty()) {
+                    Moneda resultado = consulta.buscarMoneda(base, target, valor);
+                    System.out.printf("El valor %.2f [%s] corresponde al valor final de =>>> %.2f [%s]%n",
+                            valor, base, resultado.conversion_result(), target);
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Ingrese un número válido.");
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Finalizando la aplicación.");
+                break;
+            }
+        }
+        System.out.println("Programa finalizado. ¡Gracias!");
+    }
+}
